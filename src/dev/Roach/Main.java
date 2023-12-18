@@ -39,6 +39,11 @@ public class Main {
 //        System.out.println(square1.calculateDiameter());
 //        System.out.println(square1.calculateArea());
 
+//        SameContentChecker sameContentChecker = new SameContentChecker();
+//
+//        System.out.println(sameContentChecker.areTextFilesEqual("ExampleFiles\\FirstExample", "ExampleFiles\\SecondExample"));
+
+
 
     }
 }
