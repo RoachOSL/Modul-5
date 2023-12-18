@@ -43,6 +43,11 @@ public class Main {
 //
 //        System.out.println(sameContentChecker.areTextFilesEqual("ExampleFiles\\FirstExample", "ExampleFiles\\SecondExample"));
 
+        InvertFileContent invertFileContent = new InvertFileContent();
+
+        System.out.println(invertFileContent.invertFile("ExampleFiles\\FirstExample.txt"));
+
+
 
 
     }
