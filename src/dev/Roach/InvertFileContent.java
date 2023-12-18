@@ -32,9 +32,9 @@ public class InvertFileContent {
 
         StringBuilder content = new StringBuilder();
 
-        try {
-            FileWriter fw = new FileWriter(fileToSave);
-            Scanner scanner = new Scanner(fileToRead);
+        try (Scanner scanner = new Scanner(fileToRead);
+             FileWriter fw = new FileWriter(fileToSave)) {
+
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().stripTrailing();
                 content.append(line).append("\n");
@@ -47,17 +47,14 @@ public class InvertFileContent {
             }
 
             fw.write(content.toString());
-            fw.close();
 
             return true;
 
         } catch (IOException exception) {
             System.err.println("Error");
             exception.printStackTrace();
+            return false;
         }
-
-        return false;
-
     }
 
     private void createDirectory(String filePath) {

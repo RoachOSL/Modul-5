@@ -16,8 +16,11 @@ public class InvertFileContentTest {
 
     @AfterEach
     public void cleanUp() {
-        testFile.delete();
-        outputTestFile.delete();
+        boolean isTestFileDeleted = testFile.delete();
+        boolean isOutputFileDeleted = outputTestFile.delete();
+
+        System.out.println("Test file deleted: " + isTestFileDeleted);
+        System.out.println("Output file deleted: " + isOutputFileDeleted);
     }
 
     @Test
@@ -34,9 +37,9 @@ public class InvertFileContentTest {
 
         prepareTestFile();
 
-        try {
-            Scanner scannerForFirstFile = new Scanner(testFile);
-            Scanner scannerForSecondFile = new Scanner(outputTestFile);
+        Assertions.assertTrue(testObject.invertFile(testFile.getAbsolutePath()));
+
+        try (Scanner scannerForFirstFile = new Scanner(testFile); Scanner scannerForSecondFile = new Scanner(outputTestFile)) {
 
             while (scannerForFirstFile.hasNextLine() && scannerForSecondFile.hasNextLine()) {
                 String lineFirstForFirstFile = scannerForFirstFile.nextLine();
@@ -52,10 +55,8 @@ public class InvertFileContentTest {
     }
 
     private void prepareTestFile() {
-        try {
-            FileWriter fw = new FileWriter(testFile);
+        try (FileWriter fw = new FileWriter(testFile)) {
             fw.write("Ala ma kota.");
-            fw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
