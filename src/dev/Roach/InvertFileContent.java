@@ -9,9 +9,26 @@ public class InvertFileContent {
 
     public boolean invertFile(String filePath) {
 
+        createDirectory(filePath);
 
         File fileToRead = new File(filePath);
-        File fileToSave = new File(filePath + "Inverted.txt");
+
+        if (!fileToRead.exists()) {
+            try {
+                fileToRead.createNewFile();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        String invertedFilePath;
+        if (filePath.endsWith(".txt")) {
+            invertedFilePath = filePath.substring(0, filePath.length() - 4) + "Inverted.txt";
+        } else {
+            invertedFilePath = filePath + "Inverted.txt";
+        }
+
+        File fileToSave = new File(invertedFilePath);
 
         StringBuilder content = new StringBuilder();
 
@@ -41,7 +58,17 @@ public class InvertFileContent {
 
         return false;
 
+    }
 
+    private void createDirectory(String filePath) {
+        int index = filePath.lastIndexOf("\\");
+        if (index > 0) {
+            String directoryPath = filePath.substring(0, index);
+            File directory = new File(directoryPath);
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+        }
     }
 
 }
