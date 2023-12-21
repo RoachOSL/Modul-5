@@ -15,30 +15,51 @@ public class SameContentChecker {
             filePath2 += ".txt";
         }
 
-        createDirectory(filePath1);
-        createDirectory(filePath2);
+        if (CreateDirectoryUtil.createDirectory(filePath1)) {
+            System.out.println("Folder successfully created");
+        }
 
         File firstFile = new File(filePath1);
         File secondFile = new File(filePath2);
 
         try {
-
-            if (!firstFile.exists()) {
-                firstFile.createNewFile();
+            if (firstFile.createNewFile()) {
+                System.out.println("First file successfully created");
+            } else {
+                System.out.println("First file already created");
             }
-            if (!secondFile.exists()) {
-                secondFile.createNewFile();
-            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
 
-            Scanner scannerForFirstFile = new Scanner(firstFile);
-            Scanner scannerForSecondFile = new Scanner(secondFile);
+        try {
+            if (secondFile.createNewFile()) {
+                System.out.println("Second file successfully created");
+            } else {
+                System.out.println("Second file already created");
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        //If files are empty or doesn't exist --> they are not equal
+
+        if (!firstFile.exists() || !secondFile.exists() || firstFile.length() == 0 || secondFile.length() == 0) {
+            System.out.println("They are not equal");
+            return false;
+        }
+
+        try (Scanner scannerForFirstFile = new Scanner(firstFile);
+             Scanner scannerForSecondFile = new Scanner(secondFile)) {
 
             while (scannerForFirstFile.hasNextLine() || scannerForSecondFile.hasNextLine()) {
                 if (scannerForFirstFile.hasNextLine() && scannerForSecondFile.hasNextLine()) {
                     if (!scannerForFirstFile.nextLine().equals(scannerForSecondFile.nextLine())) {
+                        System.out.println("They are not equal");
                         return false;
                     }
                 } else {
+                    System.out.println("They are not equal");
                     return false;
                 }
             }
@@ -48,17 +69,8 @@ public class SameContentChecker {
             exception.printStackTrace();
         }
 
+        System.out.println("They are equal");
         return true;
     }
 
-    private void createDirectory(String filePath) {
-        int index = filePath.lastIndexOf("\\");
-        if (index > 0) {
-            String directoryPath = filePath.substring(0, index);
-            File directory = new File(directoryPath);
-            if (!directory.exists()) {
-                directory.mkdir();
-            }
-        }
-    }
 }

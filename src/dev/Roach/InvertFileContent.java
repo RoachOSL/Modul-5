@@ -9,7 +9,7 @@ public class InvertFileContent {
 
     public boolean invertFile(String filePath) {
 
-        createDirectory(filePath);
+        CreateDirectoryUtil.createDirectory(filePath);
 
         File fileToRead = new File(filePath);
 
@@ -40,6 +40,11 @@ public class InvertFileContent {
                 content.append(line).append("\n");
             }
 
+            if (content.toString().trim().isEmpty()) {
+                System.err.println("File is empty. No content to invert.");
+                return false;
+            }
+
             content.reverse();
 
             if (!content.isEmpty() && content.charAt(0) == '\n') {
@@ -57,15 +62,5 @@ public class InvertFileContent {
         }
     }
 
-    private void createDirectory(String filePath) {
-        int index = filePath.lastIndexOf("\\");
-        if (index > 0) {
-            String directoryPath = filePath.substring(0, index);
-            File directory = new File(directoryPath);
-            if (!directory.exists()) {
-                directory.mkdir();
-            }
-        }
-    }
 
 }

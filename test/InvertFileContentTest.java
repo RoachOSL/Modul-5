@@ -1,6 +1,7 @@
 import dev.Roach.InvertFileContent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -14,20 +15,23 @@ public class InvertFileContentTest {
     File testFile = new File("testFile.txt");
     File outputTestFile = new File("testFileInverted.txt");
 
+    @BeforeEach
+    private void prepareTestFile() {
+        try (FileWriter fw = new FileWriter(testFile)) {
+            fw.write("Ala ma kota.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @AfterEach
     public void cleanUp() {
         boolean isTestFileDeleted = testFile.delete();
         boolean isOutputFileDeleted = outputTestFile.delete();
-
-        System.out.println("Test file deleted: " + isTestFileDeleted);
-        System.out.println("Output file deleted: " + isOutputFileDeleted);
     }
 
     @Test
     public void testIfOutputFileIsCreatedReturnTrue() {
-
-        prepareTestFile();
-
         testObject.invertFile(testFile.getAbsolutePath());
         Assertions.assertTrue(outputTestFile.exists());
     }
@@ -35,17 +39,16 @@ public class InvertFileContentTest {
     @Test
     public void InvertFileContentTestForCorrectOutput() {
 
-        prepareTestFile();
-
         Assertions.assertTrue(testObject.invertFile(testFile.getAbsolutePath()));
 
         try (Scanner scannerForFirstFile = new Scanner(testFile); Scanner scannerForSecondFile = new Scanner(outputTestFile)) {
 
             while (scannerForFirstFile.hasNextLine() && scannerForSecondFile.hasNextLine()) {
-                String lineFirstForFirstFile = scannerForFirstFile.nextLine();
+
+                String reversedFirstLine = new StringBuilder(scannerForFirstFile.nextLine()).reverse().toString();
                 String lineFirstForSecondFile = scannerForSecondFile.nextLine();
 
-                Assertions.assertEquals(new StringBuilder(lineFirstForFirstFile).reverse().toString(), lineFirstForSecondFile);
+                Assertions.assertEquals(reversedFirstLine, lineFirstForSecondFile);
             }
             Assertions.assertFalse((scannerForFirstFile.hasNextLine()) || scannerForSecondFile.hasNextLine());
 
@@ -54,11 +57,5 @@ public class InvertFileContentTest {
         }
     }
 
-    private void prepareTestFile() {
-        try (FileWriter fw = new FileWriter(testFile)) {
-            fw.write("Ala ma kota.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

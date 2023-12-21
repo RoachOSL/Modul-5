@@ -21,4 +21,5 @@ public class HexagonTest {
         Hexagon testObject = new Hexagon(0);
         Assertions.assertEquals(0, testObject.calculateArea());
     }
+
 }

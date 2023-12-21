@@ -5,22 +5,15 @@ public class Main {
     public static void main(String[] args) {
 
 //        ListFilesInFolder listFilesInFolder = new ListFilesInFolder();
-//        listFilesInFolder.createFolder();
+//        CreateDirectoryUtil.createDirectory("ExampleFiles");
 //        System.out.println("-".repeat(50));
-//        listFilesInFolder.createFiles();
-//        System.out.println("-".repeat(50));
-//        listFilesInFolder.fillTheFiles();
-//        System.out.println("-".repeat(50));
-//        listFilesInFolder.printDirectory("E:\\ProjektyIntelliJ\\Modul-5\\ExampleFiles\\");
-//        System.out.println("-".repeat(50));
-//        listFilesInFolder.deleteFilesInFolder();
+//        listFilesInFolder.printDirectory("ExampleFiles");
 //        System.out.println("-".repeat(50));
 //        listFilesInFolder.deleteWholeFolder();
 
 //        UserNamedFile userNamedFile = new UserNamedFile();
 //        userNamedFile.writeUserInputToFile();
-
-//        userNamedFile.readFromFile("ExampleFiles\\Example.txt");
+//        userNamedFile.readFromFile("ExampleFiles\\test.txt");
 
 //        Rectangle rectangle = new Rectangle(2,5);
 //        System.out.println(rectangle.calculateArea());
@@ -38,15 +31,12 @@ public class Main {
 //        Square square1 = new Square(5);
 //        System.out.println(square1.calculateDiameter());
 //        System.out.println(square1.calculateArea());
-
+////
 //        SameContentChecker sameContentChecker = new SameContentChecker();
-//
-//        System.out.println(sameContentChecker.areTextFilesEqual("ExampleFiles\\FirstExample", "ExampleFiles\\SecondExample"));
+//        System.out.println(sameContentChecker.areTextFilesEqual("ExampleFiles\\FirstExample.txt", "ExampleFiles\\SecondExample.txt"));
 //
 //        InvertFileContent invertFileContent = new InvertFileContent();
-//
 //        System.out.println(invertFileContent.invertFile("ExampleFiles\\FirstExample.txt"));
-
 
 
 

@@ -9,25 +9,13 @@ import java.util.Scanner;
 
 public class ListFilesInFolder {
 
-    public void createFolder() {
 
-        File folder = new File("E:\\ProjektyIntelliJ\\Modul-5\\ExampleFiles");
+    private void createFiles() {
 
-        if (!folder.exists()) {
-            folder.mkdir();
-            System.out.println("Folder created: " + folder.getAbsolutePath());
-        } else {
-            System.out.println("Folder is already created");
-        }
-    }
-
-    public void createFiles() {
-
-        String path = "E:\\ProjektyIntelliJ\\Modul-5\\ExampleFiles\\";
         for (int i = 0; i < 15; i++) {
 
             String fileName = (i + 1) + "exampleFile" + ".txt";
-            File file = new File(path + fileName);
+            File file = new File("ExampleFiles\\" + fileName);
 
             try {
                 if (file.createNewFile()) {
@@ -42,19 +30,15 @@ public class ListFilesInFolder {
         }
     }
 
-    public void fillTheFiles() {
+    private void fillTheFiles() {
 
-        String path = "E:\\ProjektyIntelliJ\\Modul-5\\ExampleFiles\\";
-        File folder = new File(path);
-
+        File folder = new File("ExampleFiles");
         File[] files = folder.listFiles();
 
         if (files != null && files.length > 0) {
             for (File file : files) {
-                try {
-                    FileWriter fw = new FileWriter(file);
+                try (FileWriter fw = new FileWriter(file)) {
                     fw.write(randomText());
-                    fw.close();
                     System.out.println("File " + file.getName() + " filled with random text");
                 } catch (IOException exception) {
                     System.err.println("Error occured");
@@ -70,6 +54,13 @@ public class ListFilesInFolder {
 
     public void printDirectory(String directoryPath) {
 
+        createFiles();
+        fillTheFiles();
+
+        if (directoryPath.startsWith("\\")) {
+            directoryPath = directoryPath.substring(1);
+        }
+
         File file = new File(directoryPath);
         File[] files = file.listFiles();
 
@@ -82,9 +73,7 @@ public class ListFilesInFolder {
 
     public void deleteFilesInFolder() {
 
-        String path = "E:\\ProjektyIntelliJ\\Modul-5\\ExampleFiles\\";
-        File folder = new File(path);
-
+        File folder = new File("ExampleFiles");
         File[] files = folder.listFiles();
 
         if (files != null) {
@@ -97,7 +86,7 @@ public class ListFilesInFolder {
 
     }
 
-    public void deleteFilesInFolder(File directory) {
+    private void deleteFilesInFolder(File directory) {
 
         File[] files = directory.listFiles();
 
@@ -125,12 +114,12 @@ public class ListFilesInFolder {
 
     public void deleteWholeFolder() {
 
-        String path = "E:\\ProjektyIntelliJ\\Modul-5\\ExampleFiles";
+        String path = "ExampleFiles";
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Are you sure you want to delete content of: " +
                 "\n " + path + " ? ");
-        System.out.println("Type \"yes\" to proceed");
+        System.out.println("Type \"yes\" to proceed \n");
         String input = scanner.nextLine().toLowerCase();
 
         if (input.equals("yes")) {
@@ -138,7 +127,7 @@ public class ListFilesInFolder {
             if (folder.exists() && folder.isDirectory()) {
                 deleteFilesInFolder(folder);
                 if (folder.delete()) {
-                    System.out.println("You successfully delted folder and files");
+                    System.out.println("You successfully deleted folder and files");
                 }
             } else {
                 System.err.println("The specified path is not a directory or does not exist.");
@@ -148,7 +137,7 @@ public class ListFilesInFolder {
         }
     }
 
-    public String randomText() {
+    private String randomText() {
 
         StringBuilder sb = new StringBuilder();
         Random randomCharGenerator = new Random();
@@ -159,6 +148,7 @@ public class ListFilesInFolder {
             }
 
             int randomInt = randomCharGenerator.nextInt(52);
+            // It skips 6 ASCII Character between big A-Z and small a-z
             if (randomInt >= 26) {
                 randomInt += 6;
             }

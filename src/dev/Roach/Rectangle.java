@@ -19,7 +19,4 @@ public class Rectangle implements GeometricFigure {
         return shorterSide;
     }
 
-    public int getLongerSide() {
-        return longerSide;
-    }
 }

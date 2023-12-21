@@ -7,67 +7,103 @@ import java.util.Scanner;
 
 public class UserNamedFile {
 
+    private String lastWrittenFilePath;
+
     public boolean writeUserInputToFile() {
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Provide name for your file: ");
-        String name = scanner.nextLine();
+        try (Scanner scanner = new Scanner(System.in)) {
 
-        if (!name.toLowerCase().endsWith(".txt")) {
-            name += ".txt";
-        }
+            System.out.println("Provide name for your file: ");
+            String name = scanner.nextLine();
 
-        System.out.println("Provide text for your file: ");
-        String text = scanner.nextLine();
-
-        String directoryName = "ExampleFiles";
-        File directory = new File((directoryName));
-
-        if (!directory.exists()) {
-            directory.mkdir();
-        }
-
-        File file = new File(directory, name);
-
-        try {
-            FileWriter fw = new FileWriter(file);
-            String[] words = text.split("\\s+");
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < words.length; i++) {
-                sb.append(words[i]);
-                if ((i + 1) % 4 == 0) {
-                    sb.append("\n");
-                } else {
-                    sb.append(" ");
-                }
+            if (!name.toLowerCase().endsWith(".txt")) {
+                name += ".txt";
             }
 
-            fw.write(sb.toString());
-            fw.close();
-            System.out.println("Successfully wrote your text to the file.");
-            return true;
+            System.out.println("Provide text for your file: ");
+            String text = scanner.nextLine();
 
-        } catch (IOException exception) {
-            System.err.println("Error occurred");
-            exception.printStackTrace();
+            String directoryName = "ExampleFiles";
+            if (!CreateDirectoryUtil.createDirectory(directoryName)) {
+                return false;
+            }
+
+            File file = new File(directoryName, name);
+            lastWrittenFilePath = file.getAbsolutePath();
+
+            try (FileWriter fw = new FileWriter(file)) {
+                String[] words = text.split("\\s+");
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < words.length; i++) {
+                    sb.append(words[i]);
+                    if ((i + 1) % 4 == 0) {
+                        sb.append("\n");
+                    } else {
+                        sb.append(" ");
+                    }
+                }
+
+                fw.write(sb.toString());
+                fw.flush();
+                System.out.println("Successfully wrote your text to the file.");
+                readFromFile();
+                return true;
+
+            } catch (IOException exception) {
+                exception.printStackTrace();
+                return false;
+            }
+
         }
-        return false;
     }
 
     public void readFromFile(String fileName) {
 
-        try {
-            File file = new File(fileName);
-            Scanner fileReader = new Scanner(file);
+        File file = new File(fileName);
+
+        if (file.isDirectory()) {
+            System.err.println("Provided path is a directory, not a file: " + fileName);
+            return;
+        }
+
+        if (!file.exists()) {
+            System.err.println("File does not exist: " + fileName);
+            return;
+        }
+
+        try (Scanner fileReader = new Scanner(file)) {
             while (fileReader.hasNextLine()) {
                 String fileData = fileReader.nextLine();
                 System.out.println(fileData);
             }
-            fileReader.close();
-
         } catch (IOException exception) {
-            System.err.println("Error occurred");
+            exception.printStackTrace();
+        }
+
+    }
+
+    public void readFromFile() {
+
+        if (lastWrittenFilePath == null) {
+            System.err.println("No file path available to read.");
+            return;
+        }
+
+        File file = new File(lastWrittenFilePath);
+
+        if (!file.exists()) {
+            System.err.println("File does not exist: " + lastWrittenFilePath);
+            return;
+        }
+
+        try (Scanner fileReader = new Scanner(file)) {
+            System.out.println("Reading from file: " + file.getAbsolutePath());
+            while (fileReader.hasNextLine()) {
+                String fileData = fileReader.nextLine();
+                System.out.println(fileData);
+            }
+        } catch (IOException exception) {
             exception.printStackTrace();
         }
 
