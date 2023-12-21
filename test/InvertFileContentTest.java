@@ -26,8 +26,8 @@ public class InvertFileContentTest {
 
     @AfterEach
     public void cleanUp() {
-        boolean isTestFileDeleted = testFile.delete();
-        boolean isOutputFileDeleted = outputTestFile.delete();
+        testFile.delete();
+        outputTestFile.delete();
     }
 
     @Test
